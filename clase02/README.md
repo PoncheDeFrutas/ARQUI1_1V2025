@@ -113,7 +113,7 @@ sudo apt install git   # Instala un paquete
 sudo apt remove nano   # Elimina un paquete
 ```
 
-## 9. Atajos de Teclado
+## 6. Atajos de Teclado
 
 | Atajo  | Función                       |
 | ------ | ----------------------------- |
@@ -137,7 +137,7 @@ sudo apt remove nano   # Elimina un paquete
 
 * VS Code instalado
 * Raspberry Pi accesible en la red local
-* SSH habilitado en la Raspberry Pi (ver Día 1)
+* SSH habilitado en la Raspberry Pi (ver Clase 1)
 
 ### Pasos para conectar:
 
