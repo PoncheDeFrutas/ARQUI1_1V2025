@@ -8,7 +8,7 @@ dht = adafruit_dht.DHT11(board.D4)
 while True:
     try:
         temperature_c = dht.temperature
-        temperature_f = temperature_c * (9 / 5) + 32
+        temperature_f = temperature_c * (9 / 5) + 32 # type: ignore
         humidity = dht.humidity
         print(f"Temp: {temperature_c:.1f} C / {temperature_f:.1f} F, Humidity: {humidity:.1f}%")
     except RuntimeError as e:

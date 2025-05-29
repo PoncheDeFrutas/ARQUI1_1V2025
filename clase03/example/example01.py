@@ -4,7 +4,6 @@ import time
 GPIO.setmode(GPIO.BOARD)
 GPIO.setup(7, GPIO.OUT)
 
-
 try:
     while True:
         GPIO.output(7, GPIO.HIGH)   # Turn on the LED
