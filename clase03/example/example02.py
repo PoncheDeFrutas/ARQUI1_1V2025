@@ -1,8 +1,9 @@
 import time
 import board
 import adafruit_dht
+import RPi.GPIO as GPIO
 
-dht = adafruit_dht.DHT11(board.D4)
+dht = adafruit_dht.DHT11(board.D27)
 
 
 while True:
@@ -20,3 +21,5 @@ while True:
         print("Exiting program")
         break
     time.sleep(2.0)  # Wait for 2 seconds before the next reading
+
+GPIO.cleanup()  # Clean up GPIO settings on exit
