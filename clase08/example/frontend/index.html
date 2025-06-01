@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Control IoT</title>
+        <style>
+            .control-panel {
+                padding: 20px;
+                max-width: 300px;
+                margin: 0 auto;
+            }
+            button {
+                padding: 10px 15px;
+                margin: 5px;
+                background: #4caf50;
+                color: white;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+            }
+            .on {
+                background: #4caf50;
+            }
+            .off {
+                background: #f44336;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="control-panel">
+            <h2>Control de Actuadores</h2>
+            <button id="led1" onclick="toggleLED('led1')">LED 1 OFF</button>
+        </div>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.min.js"></script>
+        <script src="./app.js"></script>
+    </body>
+</html>
