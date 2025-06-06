@@ -32,3 +32,4 @@ class Sensors:
         print(f"Temp: {shared.temperature:.1f}")
         print(f"Humidity: {shared.humidity:.1f}%")
         # Print other sensor data here if needed
+        

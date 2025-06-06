@@ -57,7 +57,7 @@ class SIEPA:
             # Main loop: run tasks at the specified interval
             while self.running:
                 self.run_tasks()
-                time.sleep(self.intervals["principal"])
+                time.sleep(self.intervals["principal"]) # 0.1s
                 
         except KeyboardInterrupt:
             # Handle program interruption (Ctrl+C)
