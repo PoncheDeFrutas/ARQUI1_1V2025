@@ -2,7 +2,7 @@
 
 .section .text
 _start:
-    // write(1, mensaje, 18)
+    // write(1, mensaje, 21)
     mov x0, 1              // file descriptor 1 (stdout)
     ldr x1, =mensaje       // dirección del mensaje
     mov x2, 21             // longitud del mensaje
