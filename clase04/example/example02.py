@@ -13,9 +13,20 @@ try:
         pressure = bmp280.pressure
         altitude = bmp280.altitude
 
-        print(f"Temperature: {temperature:.2f} C")
-        print(f"Pressure: {pressure:.2f} hPa")
-        print(f"Altitude: {altitude:.2f} m")
+        if temperature is not None:
+            print(f"Temperature: {temperature:.2f} C")
+        else:
+            print("Temperature: N/A")
+
+        if pressure is not None:
+            print(f"Pressure: {pressure:.2f} hPa")
+        else:
+            print("Pressure: N/A")
+
+        if altitude is not None:
+            print(f"Altitude: {altitude:.2f} m")
+        else:
+            print("Altitude: N/A")
 
         time.sleep(2)
 except KeyboardInterrupt:

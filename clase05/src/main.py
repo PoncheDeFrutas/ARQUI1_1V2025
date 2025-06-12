@@ -27,7 +27,7 @@ class SIEPA:
         self.running = True
         # Dictionary to store loop intervals (in seconds)
         self.intervals = {
-            "principal": 0.1,   # Principal loop interval in seconds
+            "principal": 0.2,   # Principal loop interval in seconds
             "MQTT": 1,          # MQTT loop interval in seconds
         }
         # Initialize Sensors and Display objects
@@ -41,7 +41,7 @@ class SIEPA:
         self.Sensors.read_sensors()
         self.Sensors.print_data()
         self.Display.update()
-    
+        
     def mqtt_tasks(self):
         # Placeholder for MQTT-related tasks (to be implemented)
         pass

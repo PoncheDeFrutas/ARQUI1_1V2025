@@ -30,12 +30,22 @@ class Display:
         self.threshold_message = 5.0
         self.lcd.clear()
         self.lcd.backlight(self.enable)
+        self.last_view = 0
 
     
     def display_data(self):
         self.lcd.clear()
-        self.lcd.text(f'Temp: {shared.temperature:.1f}C', 1)
-        self.lcd.text(f'Hum: {shared.humidity:.1f}%', 2)
+        match self.last_view:
+            case 0: 
+                self.lcd.text(f'Temp: {shared.temperature:.1f}C', 1)
+                self.last_view += 1
+            case 1:
+                self.lcd.text(f'Hum: {shared.humidity:.1f}%', 2)
+                self.last_view += 1
+            case 2:
+                self.lcd.text(f'Temp: {shared.temperature:.1f}C', 1)
+                self.lcd.text(f'Hum: {shared.humidity:.1f}%', 2)
+                self.last_view = 0
         self.last_t = time.time()
         # add other sensor data here if needed
     
