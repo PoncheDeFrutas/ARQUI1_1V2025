@@ -8,6 +8,7 @@ buffer: .skip 1024      // space for 1024 bytes
 .data
 newline: .asciz "\n"    // new line
 
+
 .text
 _start:
     //argv[1] address
@@ -64,6 +65,7 @@ loop:
     cmp w2, 36          // if $
     beq convert         // goto convert
     cmp w2, 10          // if \n
+    
     beq skip_loop       // goto skip_loop
     sub w2, w2, 48      // convert to int
     uxtb x2, w2         // convert to 64 bit
