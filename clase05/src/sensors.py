@@ -22,16 +22,22 @@ class Sensors:
         # define other sensors here if needed
     
     def read_sensors(self):
-        temperature_c = self.dht.temperature
-        humidity = self.dht.humidity
-        if temperature_c is None or humidity is None:
-            shared.local_error_message = "Error reading sensor data"
-            return
-        if self.dht.temperature is not None:
-            shared.temperature = float(self.dht.temperature)
-        if self.dht.humidity is not None:
-            shared.humidity = float(self.dht.humidity)
-        # Add other sensor readings here if needed
+
+        try :
+            temperature_c = self.dht.temperature
+            humidity = self.dht.humidity
+            if temperature_c is None or humidity is None:
+                shared.local_error_message = "Error reading sensor data"
+                return
+            if self.dht.temperature is not None:
+                shared.temperature = float(self.dht.temperature)
+            if self.dht.humidity is not None:
+                shared.humidity = float(self.dht.humidity)
+            # Add other sensor readings here if needed
+        except RuntimeError as e:
+            shared.local_error_message = f"RuntimeError: {e}"
+
+    
 
     def print_data(self):
         print(f"Temp: {shared.temperature:.1f}")

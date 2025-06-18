@@ -104,6 +104,10 @@ CC = gcc
 AS = as
 LD = ld
 
+# Flags para debug
+ASFLAGS = -g
+LDFLAGS = -g
+
 # Directorios de salida
 BIN_C = bin_c
 BIN_AS = bin_as
@@ -114,93 +118,139 @@ $(shell mkdir -p $(BIN_C) $(BIN_AS) $(OBJ_DIR))
 
 # Si se especifica un archivo como argumento
 ifdef archivo
-    # Determinar la extensión
     ifeq ($(suffix $(archivo)),.c)
         TARGET = $(BIN_C)/$(basename $(archivo))
         SOURCE = $(archivo)
+        COMPILE_CMD = $(CC) -g $(SOURCE) -o $(TARGET)
     else ifeq ($(suffix $(archivo)),.s)
         TARGET = $(BIN_AS)/$(basename $(archivo))_asm
         OBJECT = $(OBJ_DIR)/$(basename $(archivo)).o
         SOURCE = $(archivo)
+        COMPILE_CMD = $(AS) $(ASFLAGS) $(SOURCE) -o $(OBJECT) && $(LD) $(LDFLAGS) $(OBJECT) -o $(TARGET)
     else
         $(error El archivo debe tener extensión .c o .s)
     endif
 endif
 
-# Regla por defecto
-all: $(TARGET)
-	@echo "Compilado: $(SOURCE) -> $(TARGET)"
-	@if [ -f "$(OBJECT)" ]; then rm -f "$(OBJECT)"; fi
-
-# Regla para archivos .c
-$(BIN_C)/%: %.c
-	$(CC) -o $@ $<
-
-# Regla para archivos .s (compila a objeto y luego enlaza)
-$(BIN_AS)/%_asm: $(OBJ_DIR)/%.o
-	$(LD) $< -o $@
-
-$(OBJ_DIR)/%.o: %.s
-	$(AS) $< -o $@
+# Regla por defecto que compila, pero no ejecuta gdb
+all:
+ifndef archivo
+    @echo "Error: Debes especificar un archivo con 'make archivo=archivo.c|.s'"
+else
+    @echo "Compilando $(SOURCE)..."
+    @$(COMPILE_CMD)
+    @echo "Compilación completa. Binario: $(TARGET)"
+endif
 
 # Limpieza
 clean:
-	rm -rf $(BIN_C) $(BIN_AS) $(OBJ_DIR)
+    rm -rf $(BIN_C) $(BIN_AS) $(OBJ_DIR)
 
-.PHONY: all clean
+# Debug
+debug: all
+    @if [ -f "$(TARGET)" ]; then \
+        echo "Ejecutando GDB para depuración..."; \
+        gdb -q $(TARGET); \
+    else \
+        echo "Error: El target no existe. Usa 'make archivo=archivo.s' primero."; \
+    fi
+
+.PHONY: all clean debug
 ```
-
-### Cómo usarlo
-
-Guarda tu archivo fuente, por ejemplo `programa.c`, y ejecuta:
-
-```bash
-make archivo=programa.c
-```
-
-Esto compilará el archivo `programa.c` y generará un binario en el directorio `bin_c`. Si deseas compilar un archivo de ensamblador, simplemente cambia la extensión del archivo a `.s` y usa el mismo comando.
 
 ---
 
-## Debugger gdb
-Para depurar programas en ARM64, puedes usar `gdb`, el depurador de GNU. Asegúrate de instalarlo:
+## ¿Cómo funciona el Makefile y cómo utilizarlo?
+
+El Makefile presentado automatiza la compilación de archivos fuente en C (`.c`) o ensamblador (`.s`). Según el archivo que especifiques, compila y organiza los binarios en carpetas separadas. También permite limpiar los archivos generados y depurar con GDB.
+
+### Uso básico
+
+- **Compilar un archivo C o ensamblador:**
+
+  ```bash
+  make archivo=hola.c
+  make archivo=ejemplo.s
+  ```
+
+  Esto compilará el archivo y dejará el binario en la carpeta correspondiente (`bin_c` o `bin_as`).
+
+- **Limpiar archivos generados:**
+
+  ```bash
+  make clean
+  ```
+
+  Elimina los binarios y objetos generados.
+
+- **Depurar con GDB:**
+
+  ```bash
+  make archivo=hola.c debug
+  ```
+
+  Compila el archivo y abre GDB para depuración.
+
+### ¿Qué hace cada parte?
+
+- **Variables:** Define los compiladores, flags y carpetas de salida.
+- **Reglas:** 
+  - `all`: Compila el archivo especificado.
+  - `clean`: Limpia los binarios y objetos.
+  - `debug`: Compila y abre GDB si el binario existe.
+
+---
+
+## Comandos básicos de GDB para analizar código ARM
+
+GDB es el depurador estándar en Linux y permite analizar el comportamiento de programas ARM64.
+
+### Comandos útiles
+
+- `break main`  
+  Coloca un breakpoint en la función `main`.
+
+- `run`  
+  Inicia la ejecución del programa.
+
+- `next`  
+  Ejecuta la siguiente línea de código (sin entrar en funciones).
+
+- `step`  
+  Ejecuta la siguiente línea de código (entrando en funciones).
+
+- `print <variable>`  
+  Muestra el valor de una variable.
+
+- `info registers`  
+  Muestra el estado de los registros del procesador ARM64.
+
+- `disassemble`  
+  Muestra el código ensamblador del programa.
+
+- `continue`  
+  Continúa la ejecución hasta el siguiente breakpoint.
+
+- `quit`  
+  Sale de GDB.
+
+### Ejemplo de sesión GDB
 
 ```bash
-sudo apt install gdb -y
+make archivo=hola.c debug
 ```
-### Uso básico de gdb
-Para depurar un programa compilado, simplemente ejecuta:
 
-```bash
-gdb ./hola
+Dentro de GDB:
+
 ```
-Dentro de `gdb`, puedes usar comandos como:
-## Comandos básicos de GDB para depurar ensamblador ARM64
+(gdb) break main
+(gdb) run
+(gdb) next
+(gdb) print variable
+(gdb) info registers
+(gdb) disassemble
+(gdb) continue
+(gdb) quit
+```
 
-| Comando           | Descripción                                                                |
-| ----------------- | -------------------------------------------------------------------------- |
-| `layout src`      | Muestra el código ensamblador en una ventana dividida                      |
-| `starti`          | Inicia el programa y se detiene en la primera instrucción                  |
-| `ni`              | Avanza a la siguiente instrucción (sin entrar en llamadas)                 |
-| `si`              | Avanza paso a paso (entra en llamadas)                                     |
-| `info registers`  | Muestra todos los registros                                                |
-| `print $x0`       | Imprime el valor del registro x0 (o cualquier otro, como \$x1, \$sp, etc.) |
-| `break *0x400080` | Pone un breakpoint en la dirección de memoria 0x400080                     |
-| `break _start`    | Pone un breakpoint en la etiqueta `_start`                                 |
-| `continue`        | Continúa la ejecución hasta el siguiente breakpoint                        |
-| `quit`            | Sale de gdb                                                                |
-
-### Otros comandos últiles
-
-| Comando            | Descripción                                                             |
-| ------------------ | ----------------------------------------------------------------------- |
-| `disassemble`      | Muestra el código ensamblador generado para la función actual           |
-| `x/10i $pc`        | Muestra 10 instrucciones a partir del contador de programa              |
-| `x/4x $sp`         | Muestra 4 valores en hexadecimal desde la pila                          |
-| `set $x0 = 42`     | Cambia el valor del registro x0 a 42                                    |
-| `info breakpoints` | Muestra todos los breakpoints definidos                                 |
-| `delete`           | Elimina todos los breakpoints                                           |
-| `stepi`            | Alias de `si`, ejecuta una sola instrucción en assembler                |
-| `nexti`            | Alias de `ni`, avanza a la siguiente instrucción sin entrar en llamadas |
-
-Con estos comandos puedes hacer una depuración efectiva paso a paso de programas escritos en ensamblador ARM64 utilizando GDB.
+Estos comandos te ayudarán a analizar y depurar tus programas ARM64 en la Raspberry Pi.
