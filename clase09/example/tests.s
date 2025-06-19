@@ -3,7 +3,7 @@
 .bss 
 arg1: .space 32         // space for 32 caracters
 output: .skip 12        // space for 12 bytes
-buffer: .skip 1024      // space for 1024 bytes
+buffer: .skip 8192      // space for 8192 bytes
 
 .data
 newline: .asciz "\n"    // new line
@@ -42,7 +42,7 @@ open_file:
     // read file
     mov x0, x9          // file descriptor
     ldr x1, =buffer     // buffer address
-    mov x2, 1024        // size address
+    mov x2, 8192        // size address
     mov x8, 63          // read
     svc 0               // syscall
 
