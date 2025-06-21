@@ -37,8 +37,8 @@
     x19 - temporary register
     x20 - temporary register
     x21 - Total count of newlines in the data
-    x22 - Min
-    x23 - Max
+    x22 - temporary register
+    x23 - temporary register
     x24 - temporary register
     x25 - temporary register
     x26 - temporary register
@@ -146,12 +146,8 @@ buffer:
     .space 256                  // Buffer for user input
 file_name:
     .space 32                   // Buffer for file name input
-
-
-.section .bss
     .align 3                    // Align to 8-byte boundary
 data_array:                     
-    .skip 8                     // Reserve space for data array (8 bytes for a pointer)
-
+    .quad  0                    // Reserve space for data array (8 bytes for a pointer)
 data_array_size:
-    .skip 8                     // Reserve space for data array size (8 bytes for a size_t)
+    .quad  0                    // Reserve space for data array size (8 bytes for a size_t)

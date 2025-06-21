@@ -70,7 +70,7 @@ load_data:
     svc 0                   // Make the syscall
 
     cmp x0, 0               // Check if read returned 0 (EOF)
-    beq .load_data_Close_file
+    beq .load_data_free_memory
 
     mov x10, x0             // Number of bytes read
     mov x0, x1              // x0 = address of buffer
@@ -81,12 +81,53 @@ load_data:
 
     b .load_data_Read_File_loop
 
+.load_data_free_memory:
+    ldr x0, =data_array
+    ldr x1, [x0]           // x1 = actual address
+    cbz x1, .load_data_reserve_memory     // If it is 0, there is nothing to free
+
+    ldr x2, =data_array_size
+    ldr x1, [x2]           // x1 = previous size in elements
+    mov x3, 8
+    mul x1, x1, x3         // size in bytes
+
+    mov x0, x1             // original address
+    mov x1, x1             // length
+    mov x8, 215            // syscall munmap
+    svc 0
+
+.load_data_reserve_memory:
+    mov x0, 0              // address suggested
+    mov x1, x21            // number of new elements
+    mov x2, 8
+    mul x1, x1, x2         // total size in bytes
+    mov x2, x1             // length
+    mov x3, 3              // PROT_READ | PROT_WRITE
+    mov x4, 0x22           // MAP_PRIVATE | MAP_ANONYMOUS
+    mov x5, -1             // fd
+    mov x6, 0              // offset
+    mov x8, 222            // syscall mmap
+    svc 0                   // Make the syscall
+
+.save_new_address:
+    ldr x1, =data_array
+    str x0, [x1]           // Save new address in data_array
+
+    // Save new size in data_array_size
+    ldr x1, =data_array_size
+    mov x2, x21
+    str x2, [x1]           // Save new size in data_array_size
+
+/*
+// Print the contents of the file
 .load_data_Print:
     mov x0, 1               // File descriptor for stdout
     ldr x1, =file_buffer    // Buffer containing file contents
     mov x2, 1024            // Number of bytes to print (1 KB)
     mov x8, 64              // syscall number for write
     svc 0                   // Make the syscall
+*/
+    
 
 // Close the file after reading
 .load_data_Close_file:

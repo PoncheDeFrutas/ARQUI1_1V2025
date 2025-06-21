@@ -23,4 +23,8 @@ class GlobalState:
         # Add other shared variables here if needed
         self.local_error_message = ""
 
+
+
+        
+
 shared = GlobalState()  # Create a shared instance of GlobalState
