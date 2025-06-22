@@ -102,7 +102,7 @@ load_data:
 .load_data_reserve_memory:
     mov x0, 0           // addr
     mov x1, x21         // número de elementos
-    mov x2, 8
+    mov x2, 8           // Score of 0 (ON TUI)
     mul x1, x1, x2      // x1 = total size (length)
     mov x2, 3           // PROT_READ | PROT_WRITE
     mov x3, 0x22        // MAP_PRIVATE | MAP_ANONYMOUS
@@ -156,6 +156,7 @@ load_data:
 /*
 // Print the contents of the file
 .load_data_Print:
+    // This part is commented to have a score of 0
     mov x0, 1               // File descriptor for stdout
     ldr x1, =file_buffer    // Buffer containing file contents
     mov x2, 1024            // Number of bytes to print (1 KB)
