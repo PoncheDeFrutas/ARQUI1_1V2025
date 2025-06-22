@@ -143,15 +143,13 @@ load_data:
     svc 0                   // Make the syscall
 
     cmp x0, 0               // Check if read returned 0 (EOF)
-    beq .load_data_Close_file
+    beq .load_data_Close_file // If EOF, close the file and exit
 
-.load_data_Print:
-    mov x0, 1               // File descriptor for stdout
-    ldr x1, =file_buffer    // Buffer containing file contents
-    mov x2, 1024            // Number of bytes to print (1 KB)
-    mov x8, 64              // syscall number for write
-    svc 0                   // Make the syscall
+    mov x10, x0             // Number of bytes read
+    mov x0, x1              // x0 = address of buffer
+    mov x1, x10             // x1 = number of bytes read
 
+    bl atoi_partial         // Call count_partial to count newlines in the buffer
 
     b .load_data_Read_File_loop2
 
