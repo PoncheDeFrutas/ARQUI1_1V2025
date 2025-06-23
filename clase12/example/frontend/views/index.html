@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <title>Datos del Sensor</title>
     <style>
+        /* Estilos básicos para el cuerpo, tabla y botones */
         body { font-family: Arial, sans-serif; padding: 20px; }
         table { border-collapse: collapse; width: 100%; margin-top: 20px; }
         th, td { border: 1px solid #ccc; padding: 8px; text-align: center; }
@@ -12,20 +13,26 @@
     </style>
 </head>
 <body>
+    <!-- Título principal de la página -->
     <h1>Sensor Data</h1>
+    <!-- Botón para actualizar la tabla de datos -->
     <button onclick="fetchData()">Actualizar tabla</button>
+    <!-- Tabla para mostrar los datos del sensor -->
     <table>
         <thead>
             <tr>
+                <!-- Encabezados de la tabla -->
                 <th>Timestamp</th>
                 <th>Light</th>
                 <th>Temperature</th>
                 <th>Humidity</th>
             </tr>
         </thead>
+        <!-- Cuerpo de la tabla donde se insertarán los datos dinámicamente -->
         <tbody id="data-body"></tbody>
     </table>
 
+    <!-- Inclusión del archivo JavaScript externo -->
     <script src="/script.js"></script>
 </body>
 </html>
