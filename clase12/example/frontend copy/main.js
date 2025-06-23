@@ -12,6 +12,15 @@ const client = new MongoClient(uri, {
     },
 });
 
+/**
+ * Asynchronously connects to a MongoDB server, sends a ping command to verify the connection,
+ * logs a success message, and ensures the client is closed after the operation.
+ * 
+ * @async
+ * @function run
+ * @returns {Promise<void>} Resolves when the operation is complete.
+ * @throws Will throw an error if the connection or ping fails.
+ */
 async function run() {
     try {
         // Connect the client to the server	(optional starting in v4.7)
