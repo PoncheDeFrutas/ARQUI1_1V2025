@@ -38,7 +38,7 @@ while True:
     if current_time - start_time >= 30:
         # Generar datos simulados de sensores
         data = {
-            "timestamp": datetime.utcnow().replace(tzinfo=timezone.utc).isoformat(),  # Fecha y hora actual en UTC
+            "timestamp": datetime.utcnow().replace(tzinfo=timezone.utc),
             "light": random.randint(100, 1000),            # Valor de luz aleatorio (lux)
             "temperature": round(random.uniform(15, 35), 2),  # Temperatura aleatoria (°C)
             "humidity": round(random.uniform(30, 90), 2)      # Humedad aleatoria (%)
