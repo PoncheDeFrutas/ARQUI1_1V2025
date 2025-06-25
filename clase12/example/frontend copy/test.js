@@ -1,7 +1,7 @@
 // Importa el cliente de MongoDB y la versión de la API del servidor
 const { MongoClient, ServerApiVersion } = require("mongodb");
 // Importa la librería para mostrar tablas en la consola
-const Table = require("cli-table3");
+const Table = require("cli-table3");    //SOLO PARA FINES DE DEMOSTRACIÓN
 // Carga las variables de entorno desde un archivo .env
 require("dotenv").config();
 
@@ -39,6 +39,7 @@ async function run() {
             .toArray();              // Convierte el cursor a un arreglo
 
         // Crea una tabla con encabezados y anchos de columna definidos
+        // SOLO PARA FINES DE DEMOSTRACIÓN
         const table = new Table({
             head: ["timestamp", "light", "temperature", "humidity"], // Encabezados
             colWidths: [30, 10, 15, 10],                             // Ancho de columnas

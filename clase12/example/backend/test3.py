@@ -2,7 +2,7 @@ import os
 from dotenv import load_dotenv
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
-from tabulate import tabulate
+from tabulate import tabulate # SOLO ES PARA FINES DEL EJEMPLO
 
 # Cargar .env
 load_dotenv()
@@ -23,6 +23,7 @@ data = list(cursor)
 headers = ["timestamp", "light", "temperature", "humidity"]
 table = []
 
+# Adaptar los datos a un txt temporal para el arm.
 for doc in data:
     row = [
         doc.get("timestamp", ""),
@@ -32,5 +33,5 @@ for doc in data:
     ]
     table.append(row)
 
-# Mostrar tabla en consola
+# Mostrar tabla en consola (SOLO PARA FINES DEL EJEMPLO)
 print(tabulate(table, headers=headers, tablefmt="fancy_grid"))

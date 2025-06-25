@@ -1,4 +1,3 @@
-import os
 """
 This script connects to a MongoDB database using credentials stored in environment variables.
 
@@ -18,6 +17,7 @@ Dependencies:
 Usage:
 Ensure a .env file exists with a valid "URI" variable before running this script.
 """
+import os
 from dotenv import load_dotenv
 
 from pymongo.mongo_client import MongoClient
